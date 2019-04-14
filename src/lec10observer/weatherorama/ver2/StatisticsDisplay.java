@@ -6,9 +6,11 @@ import java.awt.*;
 public class StatisticsDisplay implements Observer {
 
     private double prevTemp;
+    private double prevWave;
 
     private JFrame frame;
-    private JTextArea area;
+    private JTextArea landArea;
+    private JTextArea oceanArea;
 
     public StatisticsDisplay() {
 
@@ -18,10 +20,16 @@ public class StatisticsDisplay implements Observer {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        area = new JTextArea(200, 200);
-        frame.add(area);
-        area.setBackground(Color.ORANGE);
-        area.setText("Average Condition:\n");
+        landArea = new JTextArea(200, 200);
+        frame.add(landArea);
+        landArea.setBackground(Color.ORANGE);
+        landArea.setText("Weather Condition:\n");
+
+        oceanArea = new JTextArea(200, 200);
+        frame.add(oceanArea);
+        oceanArea.setBackground(Color.pink);
+        oceanArea.setText("Ocean Wave Condition:\n");
+
 
     }
 
@@ -32,12 +40,24 @@ public class StatisticsDisplay implements Observer {
 
             if (prevTemp == 0)
                 prevTemp = weatherData.getTemperature();
-            double avg = (prevTemp + weatherData.getTemperature()) / 2;
-            prevTemp = avg;
+            double avgTemp = (prevTemp + weatherData.getTemperature()) / 2;
+            prevTemp = avgTemp;
 
-            area.setBackground(Color.ORANGE);
-            area.setText("Average Condition:\n");
-            area.append("Temperature = " + avg);
+            landArea.setBackground(Color.ORANGE);
+            landArea.setText("Average Condition:\n");
+            landArea.append("Temperature = " + avgTemp);
+        }
+        if (data instanceof OceanData) {
+            OceanData oceanData = (OceanData) data;
+
+            if (prevWave == 0)
+                prevWave = oceanData.getWaveHeight();
+            double avgWave = (prevWave + oceanData.getWaveHeight()) / 2;
+            prevWave = avgWave;
+
+            landArea.setBackground(Color.pink);
+            landArea.setText("Average Wave Condition:\n");
+            landArea.append("Wave Height = " + avgWave);
         }
     }
 }
